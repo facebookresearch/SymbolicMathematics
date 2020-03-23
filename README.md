@@ -77,7 +77,7 @@ If you want to use your own dataset / generator, it is possible to train a model
 However, the generation process can take a while, so we recommend to first generate data, and export it into a dataset that can be used for training. This can easily be done by setting `--export_data true`:
 
 ```bash
-python train.py --export_data true
+python main.py --export_data true
 
 ## main parameters
 --batch_size 32
@@ -99,7 +99,7 @@ python train.py --export_data true
 ## considered operators, with (unnormalized) sampling probabilities
 --operators "add:10,sub:3,mul:10,div:5,sqrt:4,pow2:4,pow3:2,pow4:1,pow5:1,ln:4,exp:4,sin:4,cos:4,tan:4,asin:1,acos:1,atan:1,sinh:1,cosh:1,tanh:1,asinh:1,acosh:1,atanh:1"
 
-## other generations parameters can be found in `train.py` and `src/envs/char_sp.py`
+## other generations parameters can be found in `main.py` and `src/envs/char_sp.py`
 ```
 
 Data will be exported in the prefix and infix formats to:
@@ -122,11 +122,11 @@ count1|input1_prefix    output1_prefix
 count2|input2_prefix    output2_prefix
 ...
 ```
-Where the input and output are separated by a tab, and equations are sorted by counts. This is under this format that data has to be given to the model. The number of `counts` is not used by the model, but was not removed in case of potential curriculum learning. The last part consists in simply splitting the dataset into training / validation / test sets. This can be done with the `create_data.py` script:
+Where the input and output are separated by a tab, and equations are sorted by counts. This is under this format that data has to be given to the model. The number of `counts` is not used by the model, but was not removed in case of potential curriculum learning. The last part consists in simply splitting the dataset into training / validation / test sets. This can be done with the `split_data.py` script:
 
 ```bash
 # create a valid and a test set of 10k equations
-python create_data.py data.prefix.counts 10000
+python split_data.py data.prefix.counts 10000
 
 # remove valid inputs that are in the train
 mv data.prefix.counts.valid data.prefix.counts.valid.old
@@ -151,7 +151,7 @@ tar -xvf prim_fwd.tar.gz
 Once you have a training / validation / test set, you can train using the following command:
 
 ```bash
-python train.py
+python main.py
 
 ## main parameters
 --exp_name first_train  # experiment name
@@ -175,7 +175,7 @@ python train.py
 --validation_metrics valid_prim_fwd_acc  # validation metric (when to save the model)
 ```
 
-Additional training parameters can be found in `train.py`.
+Additional training parameters can be found in `main.py`.
 
 ## Evaluation
 
@@ -187,7 +187,7 @@ and that the expected solution in the dataset is `a_0 * cos(x) + a_1 * sin(x)`, 
 To verify the model output, we plug it into the input equation to verify that this is a valid solution. However, manually verifying the model output can take a lot of time, so we only do this at the end of training, by setting `--beam_eval true`, and using the following command:
 
 ```bash
-python train.py
+python main.py
 
 ## main parameters
 --exp_name first_eval     # experiment name
@@ -218,10 +218,10 @@ Evaluation with beam can take some time, so we recommend to use not-too-large be
 
 ### How can I run experiments on multiple GPUs?
 
-This code supports both multi-GPU and multi-node training, and was tested with up to 128 GPUs. To run an experiment with multiple GPUs on a single machine, simply replace `python train.py` in the commands above with:
+This code supports both multi-GPU and multi-node training, and was tested with up to 128 GPUs. To run an experiment with multiple GPUs on a single machine, simply replace `python main.py` in the commands above with:
 
 ```bash
-export NGPU=8; python -m torch.distributed.launch --nproc_per_node=$NGPU train.py
+export NGPU=8; python -m torch.distributed.launch --nproc_per_node=$NGPU main.py
 ```
 
 The multi-node is automatically handled by SLURM.
