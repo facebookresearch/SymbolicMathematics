@@ -3,71 +3,74 @@
 PyTorch original implementation of [Deep Learning for Symbolic Mathematics](https://arxiv.org/abs/1912.01412) (ICLR 2020).
 
 This repository contains code for:
+
 - **Data generation**
-    - Functions F with their derivatives f
-    - Functions f with their primitives F
-      - Forward (FWD)
-      - Backward (BWD)
-      - Integration by parts (IBP)
-    - Ordinary differential equations with their solutions
-      - First order (ODE1)
-      - Second order (ODE2)
+  - Functions F with their derivatives f
+  - Functions f with their primitives F
+    - Forward (FWD)
+    - Backward (BWD)
+    - Integration by parts (IBP)
+  - Ordinary differential equations with their solutions
+    - First order (ODE1)
+    - Second order (ODE2)
 - **Training**
-    - Half-precision (float16)
-    - Multi-GPU
-    - Multi-node
+  - Half-precision (float16)
+  - Multi-GPU
+  - Multi-node
 - **Evaluation**:
-    - Greedy decoding
-    - Beam search evaluation
+  - Greedy decoding
+  - Beam search evaluation
 
 We also provide:
+
 - **Datasets**
-    - Train / Valid / Test sets for all tasks considered in the paper
+  - Train / Valid / Test sets for all tasks considered in the paper
 - **Trained models**
-    - Models trained with different configurations of training data
+  - Models trained with different configurations of training data
 - **Notebook**
-    - An **[ipython notebook](https://github.com/facebookresearch/SymbolicMathematics/blob/master/beam_integration.ipynb)** with an interactive demo of the model on function integration
-
-
-
+  - An **[ipython notebook](https://github.com/facebookresearch/SymbolicMathematics/blob/master/beam_integration.ipynb)** with an interactive demo of the model on function integration
 
 ## Dependencies
 
-- Python 3
-- [NumPy](http://www.numpy.org/)
-- [SymPy](https://www.sympy.org/)
-- [PyTorch](http://pytorch.org/) (tested on version 1.3)
-- [Apex](https://github.com/nvidia/apex#quick-start) (for fp16 training)
+```bash
+pip install -r requirements.txt
+```
+
+### Apex
+
+```bash
+pip3 uninstall apex && git clone https://www.github.com/nvidia/apex && cd apex && python3 setup.py install && rm -rf ../apex
+```
 
 ## Datasets and Trained Models
 
 We provide datasets for each task considered in the paper:
 
-| Dataset                       | #train     | Link                                                                            |
-| ------------------------------|:----------:|:-------------------------------------------------------------------------------:|
-| Integration (FWD)             |    45M     | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/prim_fwd.tar.gz) |
-| Integration (BWD)             |    88M     | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/prim_bwd.tar.gz) |
-| Integration (IBP)             |    23M     | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/prim_ibp.tar.gz) |
-| Differential equations (ODE1) |    65M     | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/ode1.tar.gz)     |
-| Differential equations (ODE2) |    32M     | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/ode2.tar.gz)     |
+| Dataset                       | #train |                                      Link                                       |
+| ----------------------------- | :----: | :-----------------------------------------------------------------------------: |
+| Integration (FWD)             |  45M   | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/prim_fwd.tar.gz) |
+| Integration (BWD)             |  88M   | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/prim_bwd.tar.gz) |
+| Integration (IBP)             |  23M   | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/prim_ibp.tar.gz) |
+| Differential equations (ODE1) |  65M   |   [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/ode1.tar.gz)   |
+| Differential equations (ODE2) |  32M   |   [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/data/ode2.tar.gz)   |
 
 We also provide models trained on the above datasets, for integration:
 
-| Model training data | Accuracy (FWD) | Accuracy (BWD) | Accuracy (IBP) | Link                                                                              |
-| --------------------|:--------------:|:--------------:|:--------------:|:---------------------------------------------------------------------------------:|
-| FWD                 | 97.2%          | 16.1%          | 89.2%          | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/fwd.pth)         |
-| BWD                 | 31.6%          | 99.6%          | 60.0%          | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/bwd.pth)         |
-| IBP                 | 55.3%          | 85.5%          | 99.3%          | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ibp.pth)         |
-| FWD + BWD           | 96.8%          | 99.6%          | 86.1%          | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/fwd_bwd.pth)     |
-| BWD + IBP           | 56.7%          | 99.5%          | 98.7%          | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ibp_bwd.pth)     |
-| FWD + BWD + IBP     | 95.6%          | 99.5%          | 99.6%          | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/fwd_bwd_ibp.pth) |
+| Model training data | Accuracy (FWD) | Accuracy (BWD) | Accuracy (IBP) |                                       Link                                        |
+| ------------------- | :------------: | :------------: | :------------: | :-------------------------------------------------------------------------------: |
+| FWD                 |     97.2%      |     16.1%      |     89.2%      |     [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/fwd.pth)     |
+| BWD                 |     31.6%      |     99.6%      |     60.0%      |     [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/bwd.pth)     |
+| IBP                 |     55.3%      |     85.5%      |     99.3%      |     [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ibp.pth)     |
+| FWD + BWD           |     96.8%      |     99.6%      |     86.1%      |   [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/fwd_bwd.pth)   |
+| BWD + IBP           |     56.7%      |     99.5%      |     98.7%      |   [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ibp_bwd.pth)   |
+| FWD + BWD + IBP     |     95.6%      |     99.5%      |     99.6%      | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/fwd_bwd_ibp.pth) |
 
 and for differential equations:
 
-| Model training data | Accuracy (ODE1) | Accuracy (ODE2) | Link                                                                       |
-| --------------------|:---------------:|:---------------:|:--------------------------------------------------------------------------:|
-| ODE1                | 97.2%           | -               | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ode1.pth) |
-| ODE2                | -               | 88.2%           | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ode2.pth) |
+| Model training data | Accuracy (ODE1) | Accuracy (ODE2) |                                    Link                                    |
+| ------------------- | :-------------: | :-------------: | :------------------------------------------------------------------------: |
+| ODE1                |      97.2%      |        -        | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ode1.pth) |
+| ODE2                |        -        |      88.2%      | [Link](https://dl.fbaipublicfiles.com/SymbolicMathematics/models/ode2.pth) |
 
 All accuracies above are given using a beam search of size 10. Note that these datasets and models slightly differ from the ones used in the paper.
 
@@ -77,32 +80,27 @@ If you want to use your own dataset / generator, it is possible to train a model
 However, the generation process can take a while, so we recommend to first generate data, and export it into a dataset that can be used for training. This can easily be done by setting `--export_data true`:
 
 ```bash
-python main.py --export_data true
-
-## main parameters
---batch_size 32
---cpu true
---exp_name prim_bwd_data
---num_workers 20               # number of processes
---tasks prim_bwd               # task (prim_fwd, prim_bwd, prim_ibp, ode1, ode2)
---env_base_seed -1             # generator seed (-1 for random seed)
-
-## generator configuration
---n_variables 1                # number of variables (x, y, z)
---n_coefficients 0             # number of coefficients (a_0, a_1, a_2, ...)
---leaf_probs "0.75,0,0.25,0"   # leaf sampling probabilities
---max_ops 15                   # maximum number of operators (at generation, but can be much longer after derivation)
---max_int 5                    # max value of sampled integers
---positive true                # sign of sampled integers
---max_len 512                  # maximum length of generated equations
-
-## considered operators, with (unnormalized) sampling probabilities
+python main.py --export_data true \
+--batch_size 32 \
+--cpu true \
+--exp_name prim_bwd_data \
+--num_workers 20 \
+--tasks prim_bwd \
+--env_base_seed -1 \
+--n_variables 1 \
+--n_coefficients 0 \
+--leaf_probs "0.75,0,0.25,0" \
+--max_ops 15 \
+--max_int 5 \
+--positive true \
+--max_len 512 \
 --operators "add:10,sub:3,mul:10,div:5,sqrt:4,pow2:4,pow3:2,pow4:1,pow5:1,ln:4,exp:4,sin:4,cos:4,tan:4,asin:1,acos:1,atan:1,sinh:1,cosh:1,tanh:1,asinh:1,acosh:1,atanh:1"
 
 ## other generations parameters can be found in `main.py` and `src/envs/char_sp.py`
 ```
 
 Data will be exported in the prefix and infix formats to:
+
 - `./dumped/prim_bwd_data/EXP_ID/data.prefix`
 - `./dumped/prim_bwd_data/EXP_ID/data.infix`
 
@@ -111,17 +109,21 @@ Data will be exported in the prefix and infix formats to:
 Note that some generators are very fast, such as `prim_bwd`, which only requires to generate a random function and to differentiate it. The others are significantly longer. For instance, the validity of differential equations is checked (symbolically and numerically) after generation, which can be expensive. In our case, we generated the data across a large number of CPUs to create a large training set. For reproducibility, we provide our training / validation / test datasets in the links above. Generators can be made faster by decreasing the timeout generation time in `char_sp.py`, but this may slightly reduce the set of equations that the generator can produce.
 
 If you generate your own dataset, you will notice that the generator generates a lot of duplicates (which is inevitable if you parallelize the generation). In practice, we remove duplicates using:
+
 ```bash
 cat ./dumped/prim_bwd_data/*/data.prefix \
 | awk 'BEGIN{PROCINFO["sorted_in"]="@val_num_desc"}{c[$0]++}END{for (i in c) printf("%i|%s\n",c[i],i)}' \
 > data.prefix.counts
 ```
+
 The resulting format is the following:
+
 ```
 count1|input1_prefix    output1_prefix
 count2|input2_prefix    output2_prefix
 ...
 ```
+
 Where the input and output are separated by a tab, and equations are sorted by counts. This is under this format that data has to be given to the model. The number of `counts` is not used by the model, but was not removed in case of potential curriculum learning. The last part consists in simply splitting the dataset into training / validation / test sets. This can be done with the `split_data.py` script:
 
 ```bash
@@ -151,28 +153,20 @@ tar -xvf prim_fwd.tar.gz
 Once you have a training / validation / test set, you can train using the following command:
 
 ```bash
-python main.py
-
-## main parameters
---exp_name first_train  # experiment name
---fp16 true --amp 2     # float16 training
-
-## dataset location
---tasks "prim_fwd"                                                    # task
---reload_data "prim_fwd,prim_fwd.train,prim_fwd.valid,prim_fwd.test"  # data location
---reload_size 40000000                                                # training set size
-
-## model parameters
---emb_dim 1024    # model dimension
---n_enc_layers 6  # encoder layers
---n_dec_layers 6  # decoder layers
---n_heads 8       # number of heads
-
-## training parameters
---optimizer "adam,lr=0.0001"             # model optimizer
---batch_size 32                          # batch size
---epoch_size 300000                      # epoch size (number of equations per epoch)
---validation_metrics valid_prim_fwd_acc  # validation metric (when to save the model)
+python main.py \
+--exp_name first_train \
+--fp16 true --amp 2 \
+--tasks "prim_fwd" \
+--reload_data "prim_fwd,prim_fwd.train,prim_fwd.valid,prim_fwd.test" \
+--reload_size 40000000 \
+--emb_dim 1024 \
+--n_enc_layers 6 \
+--n_dec_layers 6 \
+--n_heads 8 \
+--optimizer "adam,lr=0.0001" \
+--batch_size 32 \
+--epoch_size 300000 \
+--validation_metrics valid_prim_fwd_acc
 ```
 
 Additional training parameters can be found in `main.py`.
@@ -234,7 +228,7 @@ For all the tasks we considered, the input is composed of an equation with a fun
 
 ## References
 
-[**Deep Learning for Symbolic Mathematics**](https://arxiv.org/abs/1912.01412) (ICLR 2020) - Guillaume Lample * and François Charton *
+[**Deep Learning for Symbolic Mathematics**](https://arxiv.org/abs/1912.01412) (ICLR 2020) - Guillaume Lample _ and François Charton _
 
 ```
 @article{lample2019deep,
